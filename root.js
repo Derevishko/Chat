@@ -1,8 +1,5 @@
 const router = require('express').Router();
 
-router.get('/', (req,res) => {
-  res.write(`ip:${req.ip} Hi.`);
-  res.end();
-})
+router.use('/auth', require('./routes/auth'));
 
 module.exports = router;

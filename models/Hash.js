@@ -4,7 +4,7 @@ class Hash{
     this.base64usrl = require('base64url');
   }
   createHash(string) {
-    let hash = this.sha256(string);
+    let hash = this.sha256(string, {asBytes: true});
     return this.toBase64url(hash);
   }
   toBase64url(string) {
@@ -14,3 +14,5 @@ class Hash{
     return this.base64usrl.decode(string);
   }
 }
+
+module.exports = new Hash();

@@ -1,3 +1,8 @@
 const router = require('express').Router();
-const auth = require()
-router.post('/reg', )
+const auth = require('../controllers/Auth');
+
+router.post('/reg', auth.reg);
+
+router.post('/log', auth.log);
+
+module.exports = router;
