@@ -1,17 +1,14 @@
 <template>
-  <div class="home">
+  <div class="chat">
     <ul>
       <li v-for="(message,index) in messages" :key="index">
         <b>{{message.user}}:</b>
         <span>{{message.text}} </span>
       </li>
     </ul>
-    <form @submit.prevent="send">
-      <input type="text" v-model="text">
-      <button v-if="user"> > </button>
+    <form @submit.prevent="send" class="message">
+      <textarea type="text" :placeholder="'Введите сообщение....'" @keyup.shift.enter="send" v-model="text"></textarea>
     </form>
-
-
   </div>
 </template>
 
@@ -42,6 +39,8 @@ export default {
   },
   methods: {
     send() {
+      this.text = this.text.trim();
+      if(!this.text) return null;
       if ( this.user ) {
         this.ws.send(this.messageForSend)
         this.text = '';
@@ -57,7 +56,5 @@ export default {
       }
     }
   },
-  components: {
-  }
 }
 </script>

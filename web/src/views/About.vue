@@ -1,10 +1,10 @@
 <template>
   <div class="about">
-    <button @click="isLogin = !isLogin">Change</button>
-    <form @submit.prevent="send">
-      <h1>{{message}}</h1>
-      <input type="text" v-model='login'>
-      <input type="password" v-model='password'>
+    <h1>{{message}}</h1>
+    <button @click="isLogin = !isLogin" :style="{'margin-bottom':'20px'}">Change</button>
+    <form @submit.prevent="send" class='log-reg'>
+      <label><b>Login:</b><input type="text" v-model='login'></label>
+      <label><b>Password:</b><input type="password" v-model='password'></label>
       <button>
         {{message}}  
       </button>      
