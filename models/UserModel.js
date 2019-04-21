@@ -10,10 +10,20 @@ class UserModel {
       throw new Error(409);
     }
   }
-
   async findUser(user) {
     try {
       let result = await this.mongoose.user.find(user);
+      if ( result.length ) return result[0];
+      throw new Error(404) 
+    } catch (err) {
+      if ( err.message == 404 ) throw err;
+      throw new Error(400);
+    }
+  }
+  async getUser(user_id) {
+    try {
+      user_id = this.mongoose.generateKey(user_id);
+      let result = await this.mongoose.user.find({_id:user_id});
       if ( result.length ) return result[0];
       throw new Error(404) 
     } catch (err) {

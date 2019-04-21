@@ -1,8 +1,8 @@
 class WebSocket{
   constructor(wss) {
     this.wss = wss;
-    this.chat = require('./controllers/Chat');
     this.chatModel = require('./models/ChatModel');
+    this.userModel = require('./models/UserModel');
     wss.on('connection', (ws) => this.connect(ws))
     wss.broadcast = this.broadcast
   }
@@ -21,10 +21,13 @@ class WebSocket{
     ws.send('something');
   }
   async message(ws, data) {
-    let message = JSON.parse(data)
     try {
-      await this.chatModel.saveMessage(message);
-      this.wss.broadcast(data);
+      data = JSON.parse(data)
+      console.log(data)
+      let user = await this.userModel.getUser(data.user_id);
+      delete data.user_id;
+      data.user = user.login;
+      this.wss.broadcast(JSON.stringify(data));
     } catch(err) {
       console.log(err.message)
     }

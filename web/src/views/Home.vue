@@ -1,23 +1,21 @@
 <template>
   <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <ul>
+      <li v-for="(message,index) in messages" :key="index">
+        <b>{{message.user}}:</b>
+        <span>{{message.text}} </span>
+      </li>
+    </ul>
     <form @submit.prevent="send">
       <input type="text" v-model="text">
-      <button> > </button>
+      <button v-if="user"> > </button>
     </form>
-    <div>
-      <p v-for="(message,index) in messages" :key="index">{{message}}</p>
-    </div>
 
 
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'home',
   data() {
@@ -28,32 +26,38 @@ export default {
     }
   },
   created() {
+    this.$store.commit('user', localStorage.user);
     this.wsConnect();
   },
   computed: {
+    user() {
+      return this.$store.getters.user;
+    },
     messageForSend() {
       return JSON.stringify({
-        user_id:'5cbc2eee2f55154174b5c5ad',
+        user_id: this.user,
         text: this.text
       })
     }
   },
   methods: {
     send() {
-      this.ws.send(this.messageForSend)
+      if ( this.user ) {
+        this.ws.send(this.messageForSend)
+        this.text = '';
+      } else {
+        alert('Need Authorization.')
+        this.$router.push({name: 'log-reg'})
+      }
     },
     wsConnect() {
       this.ws = new WebSocket("ws://localhost:3000");
       this.ws.onmessage = ({data}) => {
-        console.log(data);
         this.messages.push(JSON.parse(data))
       }
-      // отправляем сообщение 
-      // this.ws.onopen = () => this.ws.send( JSON.stringify({user_id:'5cbc2eee2f55154174b5c5ad', text: new Date().toISOString()}) );
-      }
+    }
   },
   components: {
-    HelloWorld
   }
 }
 </script>
